@@ -11,7 +11,7 @@ output:
 
 ## Cyclospora
 
-Cyclosporiasis is an intestinal sickness caused by the coccidian parasite *Cyclospora cayetanensis*. An outbreak in 2017 seemingly from Mexican cilantro has affected many people, and the Texas public health board and CDC put out some of the data publically. I wanted to go through this data, make choropleth plots for the counties affected (because I am unfamiliar with Texan counties) and plot out the data. This was also prompted because I ate some cilantro and immediately went into hypochondriac mode. 
+Cyclosporiasis is an intestinal sickness caused by the coccidian parasite *Cyclospora cayetanensis*. An outbreak in 2017 seemingly from Mexican cilantro has affected many people, and the Texas public health board and CDC put out some of the data publically. I wanted to go through this data, make choropleth plots for the counties affected (because I am unfamiliar with Texan counties) and plot out the data. This was also prompted because I ate some cilantro and immediately went into hypochondriac mode. You can find the code for this post at https://github.com/robchoudhury/TexasCyclospora
 
 Lets get into it!
 
