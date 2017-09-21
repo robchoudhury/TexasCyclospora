@@ -1,0 +1,112 @@
+---
+title: "Cyclospora Outbreak in Texas"
+author: "Robin Choudhury"
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
+---
+
+## Cyclospora
+
+Cyclosporiasis is an intestinal sickness caused by the coccidian parasite *Cyclospora cayetanensis*. An outbreak in 2017 seemingly from Mexican cilantro has affected many people, and the Texas public health board and CDC put out some of the data publically. I wanted to go through this data, make choropleth plots for the counties affected (because I am unfamiliar with Texan counties) and plot out the data. This was also prompted because I ate some cilantro and immediately went into hypochondriac mode. 
+
+Lets get into it!
+
+```{r load packages and data, echo=FALSE, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(lubridate)
+library(choroplethr)
+library(choroplethrMaps)
+library(viridis)
+
+timeline=read_csv("timeline.csv")
+texas=read_csv("TexasCountiesAug22.csv")
+texas$county.name=tolower(texas$county.name)
+texas$date=mdy(texas$date)
+us=read_csv("sep15cyclospora.csv")
+us$state.name=tolower(us$state.name)
+data(county.regions)
+timeline$cumsum=cumsum(timeline$"Number of Cases")
+timeline$`Onset Date`=mdy(timeline$`Onset Date`)
+
+test=full_join(texas, county.regions)
+test.1=test[complete.cases(test), ]
+
+Aug22=test.1 %>%
+  filter(., date>as.Date("2017-08-02"))
+
+Aug02=test.1 %>%
+  filter(., date<as.Date("2017-08-22"))
+
+```
+
+
+## Epi Curves in Texas
+
+They recorded the number of cases over time in Texas.
+
+```{r}
+ggplot(timeline, aes(`Onset Date`, `Number of Cases`, fill="red"))+
+  geom_bar(stat = "identity")+
+  theme(legend.position = "none")
+
+ggplot(timeline, aes(`Onset Date`, cumsum))+
+  geom_step()+
+  ylab("Total Cases")
+
+```
+
+
+Because of the long latent period of the pathogen and the delay between reporting from hospitals, it's possible that there have been more cases after the end of July which have just not filtered through yet.
+
+
+```{r, warning=FALSE, message=FALSE}
+Aug02= Aug02 %>%
+  select(.,c(.data$region,.data$cases)) 
+colnames(Aug02)<-c("region","value")
+Aug02=rbind(Aug02, c(2020, max(test.1$cases))) #region 2020 is the eastern Aleutean Islands, this (hopefully?) tricks ggplot into plotting a fake max
+
+
+Aug22= Aug22 %>%
+  select(.,c(.data$region,.data$cases))
+colnames(Aug22)<-c("region","value")
+Aug22=rbind(Aug22, c(2020, max(test.1$cases)))
+
+
+choro02=county_choropleth(Aug02,
+                  num_colors = 1,
+                  legend = "Year",
+                  state_zoom = c("texas"))
+
+choro02 = choro02+ scale_fill_viridis(limits = range(Aug02$value))+ggtitle("Number of Cases from August 02, 2017");choro02
+
+
+
+choro22=county_choropleth(Aug22,
+                  num_colors = 1,
+                  legend = "Year",
+                  state_zoom = c("texas"))
+
+choro22 = choro22+ scale_fill_viridis()+ggtitle("Number of Cases from August 22, 2017");choro22
+
+```
+
+## Now the Rest of the US
+
+```{r}
+test2.1= us %>%
+  select(.,c(.data$state.name,.data$infected))
+colnames(test2.1)<-c("region","value")
+
+choroUS=state_choropleth(test2.1,
+                  num_colors = 1,
+                  legend = "Year")
+
+choroUS = choroUS+ scale_fill_viridis()+ggtitle("US Cyclospora Outbreak as of 2017-09-13");choroUS
+
+```
+
+
+So while Texas bore the brunt of the epidemic, other states definitely were also affected. It should be noted that NYC had almost 3 times as many cases as the rest of NY state, but I couldnt represent that on the graph.
