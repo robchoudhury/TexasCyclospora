@@ -1,12 +1,10 @@
 ---
 title: "Cyclospora Outbreak in Texas"
 author: "Robin Choudhury"
-date: "`r Sys.Date()`"
+date: "`r format(Sys.Date())`"
 output:
-  prettydoc::html_pretty:
-    theme: cayman
-    highlight: github
-  keep_md: true
+      html_document:
+        keep_md: true
 ---
 
 ## Cyclospora
@@ -52,13 +50,10 @@ They recorded the number of cases over time in Texas.
 ggplot(timeline, aes(`Onset Date`, `Number of Cases`, fill="red"))+
   geom_bar(stat = "identity")+
   theme(legend.position = "none")
-ggsave(filename = "timeline.jpg")
-
 
 ggplot(timeline, aes(`Onset Date`, cumsum))+
   geom_step()+
   ylab("Total Cases")
-ggsave(filename = "totalcases.jpg")
 
 ```
 
@@ -85,7 +80,7 @@ choro02=county_choropleth(Aug02,
                   state_zoom = c("texas"))
 
 choro02 = choro02+ scale_fill_viridis(limits = range(Aug02$value))+ggtitle("Number of Cases from August 02, 2017");choro02
-ggsave(filename = "Aug02.jpg")
+
 
 
 choro22=county_choropleth(Aug22,
@@ -94,7 +89,6 @@ choro22=county_choropleth(Aug22,
                   state_zoom = c("texas"))
 
 choro22 = choro22+ scale_fill_viridis()+ggtitle("Number of Cases from August 22, 2017");choro22
-ggsave(filename = "Aug22.jpg")
 
 ```
 
@@ -110,7 +104,6 @@ choroUS=state_choropleth(test2.1,
                   legend = "Year")
 
 choroUS = choroUS+ scale_fill_viridis()+ggtitle("US Cyclospora Outbreak as of 2017-09-13");choroUS
-ggsave(filename = "USSep13.jpg")
 
 ```
 

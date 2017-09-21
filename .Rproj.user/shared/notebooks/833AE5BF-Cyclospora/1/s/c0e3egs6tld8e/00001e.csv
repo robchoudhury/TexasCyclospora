@@ -1,0 +1,5 @@
+"0","choro22=county_choropleth(Aug22,"
+"0","                  num_colors = 1,"
+"0","                  legend = ""Year"","
+"0","                  state_zoom = c(""texas""))"
+"0","choro22 = choro22+ scale_fill_viridis()+ggtitle(""Number of Cases from August 22, 2017"");choro22"

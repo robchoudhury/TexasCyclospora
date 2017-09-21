@@ -1,0 +1,3 @@
+"0","ggplot(timeline, aes(`Onset Date`, `Number of Cases`, fill=""red""))+"
+"0","  geom_bar(stat = ""identity"")+"
+"0","  theme(legend.position = ""none"")"
